@@ -1,0 +1,1026 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulaire d'Interpellation BCSO</title>
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --gold: #D4AF37;
+            --dark-blue: #1a2332;
+            --navy: #2c3e50;
+            --light-gold: #f4e5b8;
+            --red: #e74c3c;
+            --orange: #e67e22;
+            --green: #27ae60;
+            --bg-dark: #0f1419;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, var(--bg-dark) 0%, var(--dark-blue) 50%, var(--navy) 100%);
+            color: #fff;
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            padding: 2rem 0 3rem 0;
+            border-bottom: 3px solid var(--gold);
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .header::before {
+            content: '🚔';
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 4rem;
+            filter: drop-shadow(0 4px 8px rgba(212, 175, 55, 0.5));
+        }
+
+        .header h1 {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--gold);
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
+        }
+
+        .header .subtitle {
+            font-size: 1.1rem;
+            color: var(--light-gold);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .form-container {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 3rem;
+            border: 2px solid rgba(212, 175, 55, 0.3);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+        }
+
+        .section {
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--gold);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 2px solid rgba(212, 175, 55, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .form-group label {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--light-gold);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            padding: 0.875rem 1.125rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(212, 175, 55, 0.3);
+            border-radius: 8px;
+            color: #fff;
+            font-size: 1rem;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--gold);
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
+        }
+
+        .form-group input::placeholder,
+        .form-group textarea::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .infractions-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1rem;
+            max-height: 500px;
+            overflow-y: auto;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            border: 2px solid rgba(212, 175, 55, 0.2);
+        }
+
+        .infractions-container::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .infractions-container::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 4px;
+        }
+
+        .infractions-container::-webkit-scrollbar-thumb {
+            background: var(--gold);
+            border-radius: 4px;
+        }
+
+        .infraction-item {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(212, 175, 55, 0.3);
+            border-radius: 8px;
+            padding: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .infraction-item:hover {
+            background: rgba(212, 175, 55, 0.1);
+            border-color: var(--gold);
+            transform: translateY(-2px);
+        }
+
+        .infraction-item.selected {
+            background: rgba(212, 175, 55, 0.2);
+            border-color: var(--gold);
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
+        }
+
+        .infraction-item.selected::after {
+            content: '✓';
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: var(--gold);
+            color: var(--dark-blue);
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .infraction-name {
+            font-weight: 600;
+            color: var(--gold);
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+            padding-right: 35px;
+        }
+
+        .infraction-details {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+            font-size: 0.875rem;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.625rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .badge-infraction {
+            background: var(--green);
+            color: white;
+        }
+
+        .badge-delit {
+            background: var(--orange);
+            color: white;
+        }
+
+        .badge-crime {
+            background: var(--red);
+            color: white;
+        }
+
+        .search-box {
+            margin-bottom: 1.5rem;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 1rem 1.25rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(212, 175, 55, 0.3);
+            border-radius: 8px;
+            color: #fff;
+            font-size: 1rem;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: var(--gold);
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
+        }
+
+        .totals-container {
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.2) 0%, rgba(212, 175, 55, 0.1) 100%);
+            border: 3px solid var(--gold);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+
+        .totals-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .total-item {
+            text-align: center;
+        }
+
+        .total-label {
+            font-size: 0.95rem;
+            color: var(--light-gold);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .total-value {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--gold);
+            text-shadow: 0 2px 8px rgba(212, 175, 55, 0.5);
+        }
+
+        .selected-infractions {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            border: 2px solid rgba(212, 175, 55, 0.2);
+        }
+
+        .selected-infractions h3 {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.3rem;
+            color: var(--gold);
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+        }
+
+        .selected-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .selected-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1rem;
+            border-radius: 8px;
+            border-left: 4px solid var(--gold);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Rajdhani', sans-serif;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--gold) 0%, #c9a227 100%);
+            color: var(--dark-blue);
+            box-shadow: 0 4px 16px rgba(212, 175, 55, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 24px rgba(212, 175, 55, 0.6);
+        }
+
+        .btn-primary:disabled {
+            background: rgba(212, 175, 55, 0.3);
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--gold);
+            border: 2px solid var(--gold);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(212, 175, 55, 0.2);
+        }
+
+        .buttons-container {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 3rem;
+        }
+
+        .alert {
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            font-weight: 500;
+            display: none;
+        }
+
+        .alert.show {
+            display: block;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .alert-warning {
+            background: rgba(230, 126, 34, 0.2);
+            border: 2px solid var(--orange);
+            color: var(--orange);
+        }
+
+        .alert-success {
+            background: rgba(39, 174, 96, 0.2);
+            border: 2px solid var(--green);
+            color: var(--green);
+        }
+
+        .alert-error {
+            background: rgba(231, 76, 60, 0.2);
+            border: 2px solid var(--red);
+            color: var(--red);
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .form-container {
+                padding: 1.5rem;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .infractions-container {
+                grid-template-columns: 1fr;
+            }
+
+            .buttons-container {
+                flex-direction: column;
+            }
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .loading.show {
+            display: block;
+        }
+
+        .spinner {
+            border: 4px solid rgba(212, 175, 55, 0.2);
+            border-top: 4px solid var(--gold);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>📋 Formulaire d'Interpellation</h1>
+            <div class="subtitle">Blaine County Sheriff's Office</div>
+        </div>
+
+        <!-- Alerts -->
+        <div id="alertContainer"></div>
+
+        <!-- Form -->
+        <div class="form-container">
+            
+            <!-- Section 1: Informations Deputy -->
+            <div class="section">
+                <div class="section-title">
+                    <span>👮</span>
+                    Informations du Deputy
+                </div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="deputyMatricule">Matricule *</label>
+                        <input type="text" id="deputyMatricule" placeholder="Ex: #042" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="deputyNom">Nom du Deputy *</label>
+                        <input type="text" id="deputyNom" placeholder="Ex: John Smith" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="dateInterpellation">Date *</label>
+                        <input type="date" id="dateInterpellation" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="heureInterpellation">Heure *</label>
+                        <input type="time" id="heureInterpellation" required>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 2: Informations Suspect -->
+            <div class="section">
+                <div class="section-title">
+                    <span>👤</span>
+                    Informations du Suspect
+                </div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="suspectNom">Nom *</label>
+                        <input type="text" id="suspectNom" placeholder="Ex: Doe" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="suspectPrenom">Prénom *</label>
+                        <input type="text" id="suspectPrenom" placeholder="Ex: John" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="suspectAge">Âge</label>
+                        <input type="number" id="suspectAge" placeholder="Ex: 28" min="1" max="120">
+                    </div>
+                    <div class="form-group">
+                        <label for="lieuInterpellation">Lieu de l'interpellation *</label>
+                        <input type="text" id="lieuInterpellation" placeholder="Ex: Sandy Shores, Route 68" required>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 3: Infractions -->
+            <div class="section">
+                <div class="section-title">
+                    <span>⚖️</span>
+                    Sélection des Infractions
+                </div>
+                
+                <div class="search-box">
+                    <input type="text" id="searchInfractions" placeholder="🔍 Rechercher une infraction...">
+                </div>
+
+                <div id="selectedCount" style="color: var(--light-gold); margin-bottom: 1rem; font-weight: 600;">
+                    Infractions sélectionnées : <span id="countNum">0</span>
+                </div>
+
+                <div class="infractions-container" id="infractionsContainer">
+                    <!-- Les infractions seront générées ici par JavaScript -->
+                </div>
+
+                <div class="selected-infractions">
+                    <h3>📝 Infractions Retenues</h3>
+                    <div class="selected-list" id="selectedList">
+                        <p style="color: rgba(255, 255, 255, 0.5); font-style: italic;">Aucune infraction sélectionnée</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 4: Observations -->
+            <div class="section">
+                <div class="section-title">
+                    <span>📝</span>
+                    Observations / Notes
+                </div>
+                <div class="form-group">
+                    <label for="observations">Détails supplémentaires</label>
+                    <textarea id="observations" rows="5" placeholder="Décrivez les circonstances de l'interpellation, le comportement du suspect, etc."></textarea>
+                </div>
+            </div>
+
+            <!-- Totaux -->
+            <div class="totals-container">
+                <div class="section-title" style="border: none; margin-bottom: 2rem;">
+                    <span>💰</span>
+                    Calcul des Sanctions
+                </div>
+                <div class="totals-grid">
+                    <div class="total-item">
+                        <div class="total-label">Amende Totale</div>
+                        <div class="total-value" id="totalAmende">0 $</div>
+                    </div>
+                    <div class="total-item">
+                        <div class="total-label">Temps d'Incarcération</div>
+                        <div class="total-value" id="totalTemps">0 min</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Buttons -->
+            <div class="buttons-container">
+                <button type="button" class="btn btn-secondary" onclick="resetForm()">🔄 Réinitialiser</button>
+                <button type="button" class="btn btn-primary" id="submitBtn" onclick="submitForm()">📤 Envoyer sur Discord</button>
+            </div>
+
+            <!-- Loading -->
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+                <p style="color: var(--gold);">Envoi en cours...</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ============================================
+        // CONFIGURATION WEBHOOK DISCORD
+        // ============================================
+        // ⚠️ IMPORTANT : Remplacez cette URL par votre propre webhook Discord
+        const DISCORD_WEBHOOK_URL = "VOTRE_WEBHOOK_ICI";
+        // Pour obtenir un webhook : Discord → Paramètres du salon → Intégrations → Webhooks → Nouveau Webhook
+        // ============================================
+
+        // Base de données des infractions (extraite du Code Pénal)
+        const infractions = [
+            // CODE 1 - INFRACTIONS ROUTIÈRES
+            { nom: "Délit de fuite", type: "Délit/Crime", amende: 3500, temps: 5, code: "CODE 1" },
+            { nom: "Non-port d'équipements de sécurité", type: "Infraction", amende: 3000, temps: 0, code: "CODE 1" },
+            { nom: "Équipements de sécurité non conformes", type: "Infraction", amende: 3000, temps: 0, code: "CODE 1" },
+            { nom: "Stationnement gênant / interdit", type: "Infraction", amende: 2000, temps: 0, code: "CODE 1" },
+            { nom: "Entrave à la Circulation", type: "Infraction/Délit", amende: 2000, temps: 0, code: "CODE 1" },
+            { nom: "Stop ou feu grillé", type: "Infraction", amende: 1000, temps: 0, code: "CODE 1" },
+            { nom: "Conduite dangereuse mineure", type: "Infraction", amende: 2000, temps: 0, code: "CODE 1" },
+            { nom: "Conduite dangereuse majeure", type: "Infraction/Délit", amende: 3000, temps: 0, code: "CODE 1" },
+            { nom: "Conduite en état d'ébriété / sous substance", type: "Délit", amende: 20000, temps: 0, code: "CODE 1" },
+            { nom: "Conduite sans permis", type: "Délit/Crime", amende: 10000, temps: 10, code: "CODE 1" },
+            { nom: "Non présentation du Permis de Conduire", type: "Infraction/Délit", amende: 1500, temps: 0, code: "CODE 1" },
+            { nom: "Conduite en contresens", type: "Infraction", amende: 4000, temps: 0, code: "CODE 1" },
+            { nom: "Marche arrière ou demi-tour sur autoroute", type: "Infraction", amende: 4000, temps: 0, code: "CODE 1" },
+            { nom: "Excès ≤ 10 km/h", type: "Infraction", amende: 2000, temps: 0, code: "CODE 1" },
+            { nom: "Excès 10 à 20 km/h", type: "Infraction", amende: 3000, temps: 0, code: "CODE 1" },
+            { nom: "Excès 20 à 30 km/h", type: "Infraction", amende: 5000, temps: 0, code: "CODE 1" },
+            { nom: "Excès ≥ 40 km/h", type: "Infraction", amende: 10000, temps: 0, code: "CODE 1" },
+            { nom: "Récidive d'excès de vitesse", type: "Délit", amende: 15000, temps: 10, code: "CODE 1" },
+            { nom: "Circulation VTT-NEV non autorisé", type: "Infraction", amende: 2500, temps: 0, code: "CODE 1" },
+            { nom: "Néon Illegal (Rouge/Bleu)", type: "Infraction/Délit", amende: 7500, temps: 0, code: "CODE 1" },
+            { nom: "Non respect du code de la route", type: "Infraction", amende: 1200, temps: 0, code: "CODE 1" },
+            { nom: "Bruit Excessif ou Pop & Bang", type: "Infraction", amende: 3500, temps: 0, code: "CODE 1" },
+            { nom: "Bruit Excessif ou Pop & Bang (Récidive)", type: "Infraction", amende: 7000, temps: 0, code: "CODE 1" },
+            
+            // CODE 2 - ATTEINTES À L'AUTORITÉ PUBLIQUE
+            { nom: "Dissimulation de visage sur la voie publique", type: "Infraction", amende: 1500, temps: 0, code: "CODE 2" },
+            { nom: "Usurpation D'identité", type: "Délit", amende: 5000, temps: 10, code: "CODE 2" },
+            { nom: "Insulte / outrage à agent public", type: "Délit", amende: 15000, temps: 10, code: "CODE 2" },
+            { nom: "Complicité", type: "Infraction/Crime", amende: 50000, temps: 60, code: "CODE 2" },
+            { nom: "Parjure", type: "Délit/Crime", amende: 30000, temps: 60, code: "CODE 2" },
+            { nom: "Entrave à la justice", type: "Délit", amende: 7500, temps: 0, code: "CODE 2" },
+            { nom: "Refus d'obtempérer", type: "Délit/Crime", amende: 7000, temps: 5, code: "CODE 2" },
+            { nom: "Appel abusif aux services d'urgence", type: "Infraction", amende: 2000, temps: 0, code: "CODE 2" },
+            { nom: "Trouble à l'ordre public", type: "Infraction/Délit", amende: 6000, temps: 0, code: "CODE 2" },
+            { nom: "Tentative de Corruption", type: "Crime", amende: 50000, temps: 15, code: "CODE 2" },
+            { nom: "Non présentation de la carte d'identité", type: "Infraction", amende: 1500, temps: 0, code: "CODE 2" },
+            { nom: "Falsification de Preuves", type: "Crime", amende: 20000, temps: 0, code: "CODE 2" },
+            
+            // CODE 3 - ATTEINTES AUX PERSONNES
+            { nom: "Menace de mort", type: "Délit", amende: 8000, temps: 0, code: "CODE 3" },
+            { nom: "Atteinte à la pudeur", type: "Délit", amende: 3000, temps: 0, code: "CODE 3" },
+            { nom: "Harcèlement", type: "Délit", amende: 2000, temps: 0, code: "CODE 3" },
+            { nom: "Agression", type: "Délit", amende: 1000, temps: 10, code: "CODE 3" },
+            { nom: "Agression à main armée", type: "Crime", amende: 10000, temps: 20, code: "CODE 3" },
+            { nom: "Coups et blessures involontaires", type: "Délit", amende: 2000, temps: 0, code: "CODE 3" },
+            { nom: "Coups et blessures volontaires", type: "Crime", amende: 5000, temps: 15, code: "CODE 3" },
+            { nom: "Kidnapping", type: "Crime", amende: 150000, temps: 50, code: "CODE 3" },
+            { nom: "Torture", type: "Crime", amende: 75000, temps: 60, code: "CODE 3" },
+            { nom: "Prise d'otage", type: "Crime", amende: 50000, temps: 50, code: "CODE 3" },
+            { nom: "Homicide involontaire", type: "Délit/Crime", amende: 15000, temps: 25, code: "CODE 3" },
+            { nom: "Homicide volontaire (meurtre)", type: "Crime", amende: 200000, temps: 60, code: "CODE 3" },
+            { nom: "Assassinat", type: "Crime", amende: 500000, temps: 180, code: "CODE 3" },
+            { nom: "Séquestration", type: "Crime", amende: 70000, temps: 50, code: "CODE 3" },
+            { nom: "Tentative de meurtre", type: "Crime", amende: 40000, temps: 40, code: "CODE 3" },
+            { nom: "Meurtre sur Agents Du Gouvernement", type: "Crime", amende: 700000, temps: 180, code: "CODE 3" },
+            { nom: "Menace Terroriste", type: "Crime", amende: 50000, temps: 50, code: "CODE 3" },
+            { nom: "Prostitution", type: "Délit", amende: 5000, temps: 0, code: "CODE 3" },
+            { nom: "Association de malfaiteurs", type: "Crime", amende: 15000, temps: 0, code: "CODE 3" },
+            
+            // CODE 4 - ATTEINTES AUX BIENS
+            { nom: "Dégradations de biens publics / privés", type: "Infraction/Délit", amende: 10000, temps: 10, code: "CODE 4" },
+            { nom: "Cambriolage", type: "Crime", amende: 5000, temps: 20, code: "CODE 4" },
+            { nom: "Violation de domicile / propriété privée", type: "Délit/Crime", amende: 10000, temps: 15, code: "CODE 4" },
+            { nom: "Tentative de vol", type: "Crime", amende: 5000, temps: 10, code: "CODE 4" },
+            { nom: "Abus de confiance", type: "Délit/Crime", amende: 5000, temps: 0, code: "CODE 4" },
+            { nom: "Escroquerie", type: "Crime", amende: 10000, temps: 10, code: "CODE 4" },
+            { nom: "Faux et usage de faux", type: "Délit", amende: 10000, temps: 0, code: "CODE 4" },
+            { nom: "Vol à main armée", type: "Crime", amende: 10000, temps: 10, code: "CODE 4" },
+            { nom: "Vol en bande organisée", type: "Crime", amende: 25000, temps: 15, code: "CODE 4" },
+            { nom: "Racket / extorsion", type: "Crime", amende: 5000, temps: 5, code: "CODE 4" },
+            { nom: "Incendie Criminel", type: "Crime", amende: 5000, temps: 0, code: "CODE 4" },
+            { nom: "Possession de biens volés", type: "Délit/Crime", amende: 10000, temps: 10, code: "CODE 4" },
+            { nom: "Possession d'outils de cambriolage", type: "Infraction", amende: 1000, temps: 0, code: "CODE 4" },
+            { nom: "Tir en zone publique", type: "Crime", amende: 50000, temps: 15, code: "CODE 4" },
+            
+            // CODE 5 - ARMES ET EXPLOSIFS
+            { nom: "Port d'arme sans permis", type: "Délit", amende: 5000, temps: 0, code: "CODE 5" },
+            { nom: "Détention d'armes illégales", type: "Crime", amende: 15000, temps: 10, code: "CODE 5" },
+            { nom: "Catégorie 1 : Arme blanche illicite", type: "Délit/Crime", amende: 2500, temps: 5, code: "CODE 5" },
+            { nom: "Catégorie 2 : Arme de poing", type: "Délit/Crime", amende: 3500, temps: 5, code: "CODE 5" },
+            { nom: "Catégorie 3 : Armes de guerre", type: "Crime", amende: 95000, temps: 30, code: "CODE 5" },
+            { nom: "Catégorie 4 : Explosifs Léger", type: "Crime", amende: 150000, temps: 60, code: "CODE 5" },
+            { nom: "Catégorie 4 : Explosifs Lourds", type: "Crime", amende: 250000, temps: 120, code: "CODE 5" },
+            { nom: "Usage d'arme à feu sur la voie publique", type: "Crime", amende: 20000, temps: 15, code: "CODE 5" },
+            { nom: "Possession d'une arme à feu chargée", type: "Délit", amende: 15000, temps: 0, code: "CODE 5" },
+            { nom: "Possession d'une arme automatique", type: "Crime", amende: 30000, temps: 20, code: "CODE 5" },
+            { nom: "Vente illégale d'arme", type: "Crime", amende: 350000, temps: 60, code: "CODE 5" },
+            { nom: "Criminel en possession d'une arme", type: "Crime", amende: 10000, temps: 10, code: "CODE 5" },
+            { nom: "Brandir une arme à feu", type: "Crime", amende: 25000, temps: 15, code: "CODE 5" },
+            { nom: "Brandir une arme Blanche", type: "Délit", amende: 2500, temps: 10, code: "CODE 5" },
+            { nom: "Rechargement d'une arme à feu en public", type: "Crime", amende: 15000, temps: 0, code: "CODE 5" },
+            
+            // CODE 6 - STUPÉFIANTS
+            { nom: "Intoxication", type: "Infraction/Délit", amende: 5000, temps: 0, code: "CODE 6" },
+            { nom: "Possession de stupéfiants (douce)", type: "Délit", amende: 10000, temps: 0, code: "CODE 6" },
+            { nom: "Possession de stupéfiants (dur)", type: "Délit", amende: 10000, temps: 0, code: "CODE 6" },
+            { nom: "Vente de Stupéfiants", type: "Délit", amende: 10000, temps: 10, code: "CODE 6" },
+            { nom: "Fabrication de Stupéfiants", type: "Délit", amende: 50000, temps: 20, code: "CODE 6" },
+            { nom: "Vente d'alcool à un mineur", type: "Infraction/Délit", amende: 8000, temps: 0, code: "CODE 6" },
+            { nom: "Possession de substance réglementée", type: "Délit", amende: 5000, temps: 0, code: "CODE 6" },
+            { nom: "Vente de substance réglementée", type: "Crime", amende: 26000, temps: 15, code: "CODE 6" },
+            { nom: "Exposition volontaire substances toxiques", type: "Crime", amende: 25000, temps: 25, code: "CODE 6" },
+            { nom: "Possession d'argent sale", type: "Délit", amende: 0, temps: 15, code: "CODE 6" },
+            
+            // CODE 7 - PRISON
+            { nom: "Tentative d'évasion de prison", type: "Crime", amende: 250000, temps: 60, code: "CODE 7" },
+            { nom: "Évasion de prison", type: "Crime", amende: 500000, temps: 180, code: "CODE 7" },
+            { nom: "Possession d'objets non autorisé", type: "Délit/Crime", amende: 10000, temps: 0, code: "CODE 7" },
+            { nom: "Émeutes", type: "Infraction/Délit/Crime", amende: 30000, temps: 10, code: "CODE 7" },
+            
+            // CODE 8 - PARC ET NATURE
+            { nom: "Chasse sans permis", type: "Délit", amende: 5000, temps: 15, code: "CODE 8" },
+            { nom: "Chasse hors parc Naturel", type: "Crime", amende: 5000, temps: 5, code: "CODE 8" },
+            { nom: "Chasse aux espèces protégées", type: "Crime", amende: 20000, temps: 5, code: "CODE 8" },
+            { nom: "Possession d'animaux illégaux", type: "Infraction/Délit", amende: 50000, temps: 0, code: "CODE 8" },
+            { nom: "Possession de poissons illégaux", type: "Infraction/Délit", amende: 50000, temps: 0, code: "CODE 8" },
+            { nom: "Cruauté animale", type: "Crime", amende: 80000, temps: 25, code: "CODE 8" }
+        ];
+
+        let selectedInfractions = [];
+
+        // Générer les cartes d'infractions
+        function generateInfractionCards() {
+            const container = document.getElementById('infractionsContainer');
+            container.innerHTML = '';
+
+            infractions.forEach((infraction, index) => {
+                const card = document.createElement('div');
+                card.className = 'infraction-item';
+                card.dataset.index = index;
+                card.dataset.keywords = infraction.nom.toLowerCase();
+
+                let badgeClass = 'badge-infraction';
+                if (infraction.type.includes('Crime')) badgeClass = 'badge-crime';
+                else if (infraction.type.includes('Délit')) badgeClass = 'badge-delit';
+
+                card.innerHTML = `
+                    <div class="infraction-name">${infraction.nom}</div>
+                    <div class="infraction-details">
+                        <div><span class="badge ${badgeClass}">${infraction.type}</span></div>
+                        <div>💰 ${infraction.amende.toLocaleString()} $</div>
+                        <div>⏱️ ${infraction.temps} min</div>
+                        <div style="color: var(--gold); font-weight: 600;">${infraction.code}</div>
+                    </div>
+                `;
+
+                card.onclick = () => toggleInfraction(index);
+                container.appendChild(card);
+            });
+        }
+
+        // Toggle infraction
+        function toggleInfraction(index) {
+            const card = document.querySelector(`[data-index="${index}"]`);
+            const infraction = infractions[index];
+
+            const isSelected = selectedInfractions.some(inf => inf.index === index);
+
+            if (isSelected) {
+                // Désélectionner
+                selectedInfractions = selectedInfractions.filter(inf => inf.index !== index);
+                card.classList.remove('selected');
+            } else {
+                // Sélectionner (pas de limite)
+                selectedInfractions.push({ ...infraction, index });
+                card.classList.add('selected');
+            }
+
+            updateSelectedList();
+            updateTotals();
+        }
+
+        // Mettre à jour la liste des infractions sélectionnées
+        function updateSelectedList() {
+            const list = document.getElementById('selectedList');
+            const countNum = document.getElementById('countNum');
+            
+            countNum.textContent = selectedInfractions.length;
+
+            if (selectedInfractions.length === 0) {
+                list.innerHTML = '<p style="color: rgba(255, 255, 255, 0.5); font-style: italic;">Aucune infraction sélectionnée</p>';
+                return;
+            }
+
+            list.innerHTML = selectedInfractions.map(inf => `
+                <div class="selected-item">
+                    <div>
+                        <strong style="color: var(--gold);">${inf.nom}</strong><br>
+                        <small>${inf.amende.toLocaleString()} $ • ${inf.temps} min</small>
+                    </div>
+                    <button onclick="toggleInfraction(${inf.index})" style="background: var(--red); color: white; border: none; padding: 0.5rem 1rem; border-radius: 4px; cursor: pointer;">✕</button>
+                </div>
+            `).join('');
+        }
+
+        // Mettre à jour les totaux
+        function updateTotals() {
+            const totalAmende = selectedInfractions.reduce((sum, inf) => sum + inf.amende, 0);
+            const totalTemps = selectedInfractions.reduce((sum, inf) => sum + inf.temps, 0);
+
+            document.getElementById('totalAmende').textContent = totalAmende.toLocaleString() + ' $';
+            document.getElementById('totalTemps').textContent = totalTemps + ' min';
+        }
+
+        // Recherche d'infractions
+        document.getElementById('searchInfractions').addEventListener('input', function(e) {
+            const search = e.target.value.toLowerCase();
+            const cards = document.querySelectorAll('.infraction-item');
+
+            cards.forEach(card => {
+                const keywords = card.dataset.keywords;
+                if (keywords.includes(search)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+
+        // Afficher une alerte
+        function showAlert(type, message) {
+            const container = document.getElementById('alertContainer');
+            const alert = document.createElement('div');
+            alert.className = `alert alert-${type} show`;
+            alert.textContent = message;
+            container.appendChild(alert);
+
+            setTimeout(() => {
+                alert.classList.remove('show');
+                setTimeout(() => alert.remove(), 300);
+            }, 4000);
+        }
+
+        // Soumettre le formulaire
+        async function submitForm() {
+            // Validation
+            const webhookUrl = DISCORD_WEBHOOK_URL;
+            
+            if (!webhookUrl || webhookUrl === "VOTRE_WEBHOOK_ICI" || !webhookUrl.includes('discord.com/api/webhooks')) {
+                showAlert('error', '❌ Le webhook Discord n\'est pas configuré. Veuillez contacter l\'administrateur.');
+                return;
+            }
+
+            const deputyMatricule = document.getElementById('deputyMatricule').value;
+            const deputyNom = document.getElementById('deputyNom').value;
+            const dateInterpellation = document.getElementById('dateInterpellation').value;
+            const heureInterpellation = document.getElementById('heureInterpellation').value;
+            const suspectNom = document.getElementById('suspectNom').value;
+            const suspectPrenom = document.getElementById('suspectPrenom').value;
+            const lieuInterpellation = document.getElementById('lieuInterpellation').value;
+
+            if (!deputyMatricule || !deputyNom || !dateInterpellation || !heureInterpellation) {
+                showAlert('error', '❌ Veuillez remplir toutes les informations du Deputy');
+                return;
+            }
+
+            if (!suspectNom || !suspectPrenom || !lieuInterpellation) {
+                showAlert('error', '❌ Veuillez remplir toutes les informations du Suspect');
+                return;
+            }
+
+            if (selectedInfractions.length === 0) {
+                showAlert('error', '❌ Veuillez sélectionner au moins une infraction');
+                return;
+            }
+
+            // Préparer les données
+            const suspectAge = document.getElementById('suspectAge').value;
+            const observations = document.getElementById('observations').value;
+            const totalAmende = selectedInfractions.reduce((sum, inf) => sum + inf.amende, 0);
+            const totalTemps = selectedInfractions.reduce((sum, inf) => sum + inf.temps, 0);
+
+            // Créer l'embed Discord
+            const embed = {
+                title: "🚔 RAPPORT D'INTERPELLATION BCSO",
+                color: 0xD4AF37, // Gold
+                fields: [
+                    {
+                        name: "👮 DEPUTY",
+                        value: `**Matricule:** ${deputyMatricule}\n**Nom:** ${deputyNom}\n**Date:** ${dateInterpellation}\n**Heure:** ${heureInterpellation}`,
+                        inline: false
+                    },
+                    {
+                        name: "👤 SUSPECT",
+                        value: `**Nom:** ${suspectNom}\n**Prénom:** ${suspectPrenom}${suspectAge ? `\n**Âge:** ${suspectAge} ans` : ''}\n**Lieu:** ${lieuInterpellation}`,
+                        inline: false
+                    },
+                    {
+                        name: "⚖️ INFRACTIONS RETENUES",
+                        value: selectedInfractions.map((inf, i) => 
+                            `**${i+1}.** ${inf.nom}\n   └ ${inf.amende.toLocaleString()} $ • ${inf.temps} min • ${inf.code}`
+                        ).join('\n\n'),
+                        inline: false
+                    },
+                    {
+                        name: "💰 AMENDE TOTALE",
+                        value: `**${totalAmende.toLocaleString()} $**`,
+                        inline: true
+                    },
+                    {
+                        name: "⏱️ TEMPS D'INCARCÉRATION",
+                        value: `**${totalTemps} minutes**`,
+                        inline: true
+                    }
+                ],
+                timestamp: new Date().toISOString(),
+                footer: {
+                    text: "Blaine County Sheriff's Office • To Serve - To Protect - With Honor"
+                }
+            };
+
+            if (observations) {
+                embed.fields.push({
+                    name: "📝 OBSERVATIONS",
+                    value: observations.substring(0, 1024),
+                    inline: false
+                });
+            }
+
+            // Envoyer via webhook
+            const loading = document.getElementById('loading');
+            const submitBtn = document.getElementById('submitBtn');
+            
+            loading.classList.add('show');
+            submitBtn.disabled = true;
+
+            try {
+                const response = await fetch(webhookUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        username: "BCSO - Système d'Interpellation",
+                        avatar_url: "https://i.imgur.com/placeholder.png", // Remplacez par l'URL du logo BCSO si disponible
+                        embeds: [embed]
+                    })
+                });
+
+                if (response.ok || response.status === 204) {
+                    showAlert('success', '✅ Rapport envoyé avec succès sur Discord !');
+                    setTimeout(() => resetForm(), 2000);
+                } else {
+                    throw new Error('Erreur lors de l\'envoi');
+                }
+            } catch (error) {
+                showAlert('error', '❌ Erreur lors de l\'envoi. Vérifiez votre URL webhook.');
+                console.error(error);
+            } finally {
+                loading.classList.remove('show');
+                submitBtn.disabled = false;
+            }
+        }
+
+        // Réinitialiser le formulaire
+        function resetForm() {
+            // Réinitialiser les champs
+            document.getElementById('deputyMatricule').value = '';
+            document.getElementById('deputyNom').value = '';
+            document.getElementById('dateInterpellation').value = '';
+            document.getElementById('heureInterpellation').value = '';
+            document.getElementById('suspectNom').value = '';
+            document.getElementById('suspectPrenom').value = '';
+            document.getElementById('suspectAge').value = '';
+            document.getElementById('lieuInterpellation').value = '';
+            document.getElementById('observations').value = '';
+            document.getElementById('searchInfractions').value = '';
+
+            // Désélectionner toutes les infractions
+            selectedInfractions.forEach(inf => {
+                document.querySelector(`[data-index="${inf.index}"]`).classList.remove('selected');
+            });
+            selectedInfractions = [];
+
+            updateSelectedList();
+            updateTotals();
+
+            // Réafficher toutes les cartes
+            document.querySelectorAll('.infraction-item').forEach(card => {
+                card.style.display = 'block';
+            });
+        }
+
+        // Initialisation au chargement
+        window.onload = function() {
+            generateInfractionCards();
+            
+            // Définir la date et l'heure actuelles
+            const now = new Date();
+            document.getElementById('dateInterpellation').valueAsDate = now;
+            document.getElementById('heureInterpellation').value = now.toTimeString().substring(0, 5);
+        };
+    </script>
+
+</body>
+</html>
